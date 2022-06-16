@@ -57,7 +57,16 @@ var createTaskEl = function (taskDataObj) {
     saveTasks();
     var taskActionsEl = createTaskActions(taskIdCounter);
     listItemEl.appendChild(taskActionsEl);
-    tasksToDoEl.appendChild(listItemEl); // attach the <li> element to the <ul> element
+    if(taskDataObj.status==="to do"){
+        tasksToDoEl.appendChild(listItemEl); // attach the <li> element to the <ul> element
+    }
+    else if(taskDataObj.status==="in progress"){
+        tasksInProgressEl.appendChild(listItemEl); // attach the <li> element to the <ul> element
+    }
+    else if(taskDataObj.status==="completed"){
+        tasksCompletedEl.appendChild(listItemEl); // attach the <li> element to the <ul> element
+    }
+    
     
     taskIdCounter++; // increment task counter for next unique id
 }
@@ -187,6 +196,14 @@ var saveTasks = function(){
     localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
+var loadTasks = function(){
+    var importTasks = JSON.parse(localStorage.getItem("tasks"))
+    for(var i=0; i<importTasks.length; i++){
+        createTaskEl(importTasks[i]);
+    }
+}
+
+loadTasks();
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
